@@ -546,7 +546,7 @@ class DiffMarker(object):
                     out.append(COLORS['reverse'] + COLORS[base_color])
                     text = text[2:]
                 elif text.startswith('\x00^'):  # change
-                    out.append(COLORS['underline'] + COLORS[base_color])
+                    out.append(COLORS['reverse'] + COLORS[base_color])
                     text = text[2:]
                 elif text.startswith('\x01'):   # reset
                     # TODO: Append resetting sequence if only there is some
@@ -701,15 +701,15 @@ class DiffMarker(object):
         return colorize(line, 'reset')
 
     def _markup_old(self, line):
-        return colorize(line, 'lightred')
+        return colorize(colorize(line, 'red'), 'reverse')
 
     def _markup_new(self, line):
-        return colorize(line, 'green')
+        return colorize(colorize(line, 'green'), 'reverse')
 
     def _markup_mix(self, line, base_color):
         del_code = COLORS['reverse'] + COLORS[base_color]
         add_code = COLORS['reverse'] + COLORS[base_color]
-        chg_code = COLORS['underline'] + COLORS[base_color]
+        chg_code = COLORS['reverse'] + COLORS[base_color]
         rst_code = COLORS['reset'] + COLORS[base_color]
         line = line.replace('\x00-', del_code)
         line = line.replace('\x00+', add_code)
